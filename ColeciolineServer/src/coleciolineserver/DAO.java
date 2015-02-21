@@ -6,8 +6,12 @@
 package coleciolineserver;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,4 +25,20 @@ public class DAO {
     static Connection conn;
     static Statement stmt;
     static ResultSet rs;
+    
+    
+    public static int conectar() {
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+            
+    
+    public void inserir(Item item){
+        
+        
+        
+    }
 }
