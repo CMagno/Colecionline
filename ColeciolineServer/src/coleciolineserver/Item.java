@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @author jesus
  */
 public class Item implements Serializable {
+    
     private int id;
     private int isbn;
     private String nome;

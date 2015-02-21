@@ -27,12 +27,13 @@ public class DAO {
     static ResultSet rs;
     
     
-    public static int conectar() {
+    public static Connection conectar() {
         try {
             conn = DriverManager.getConnection(DB_URL);
         } catch (SQLException ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return conn;
     }
             
     
