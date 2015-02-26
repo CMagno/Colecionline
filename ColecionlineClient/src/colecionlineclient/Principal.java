@@ -6,8 +6,10 @@
 
 package colecionlineclient;
 
+import colecionlineserver.Item;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -17,13 +19,18 @@ import javax.swing.JOptionPane;
  * @author jesus
  */
 public class Principal extends javax.swing.JFrame {
-
-    private Socket s;
     
+    ColecionlineClient cliente;
+    LinkedList<Item> list;
+    int idx;
+    boolean edit;
     
     public Principal() {
         initComponents();
-        
+        cliente = new ColecionlineClient();
+        list = cliente.receiveItens();
+        idx = 0;
+        draw();
     }
 
     /**
@@ -35,19 +42,162 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButtonConnectar = new javax.swing.JButton();
         jButtonSair = new javax.swing.JButton();
+        jPanel = new javax.swing.JPanel();
+        jLabelNome = new javax.swing.JLabel();
+        jTextFieldNome = new javax.swing.JTextField();
+        jLabelAutor = new javax.swing.JLabel();
+        jTextFieldAutor = new javax.swing.JTextField();
+        jLabelGenero = new javax.swing.JLabel();
+        jTextFieldGenero = new javax.swing.JTextField();
+        jLabelISBN = new javax.swing.JLabel();
+        jTextFieldISBN = new javax.swing.JTextField();
+        jLabelPags = new javax.swing.JLabel();
+        jTextFieldPags = new javax.swing.JTextField();
+        jLabelDesc = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextAreaDesc = new javax.swing.JTextArea();
+        jLabelQtde = new javax.swing.JLabel();
+        jTextFieldQtde = new javax.swing.JTextField();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonEditar = new javax.swing.JButton();
+        jButtonExcluir = new javax.swing.JButton();
+        jButtonPrev = new javax.swing.JButton();
+        jButtonNext = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        jButtonConnectar.setText("Conectar");
-        jButtonConnectar.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSair.setText("Sair");
+        jButtonSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonConnectarActionPerformed(evt);
+                jButtonSairActionPerformed(evt);
             }
         });
 
-        jButtonSair.setText("Sair");
+        jPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabelNome.setText("Nome:");
+
+        jLabelAutor.setText("Autor:");
+
+        jLabelGenero.setText("Gênero:");
+
+        jLabelISBN.setText("ISBN:");
+
+        jLabelPags.setText("Páginas:");
+
+        jLabelDesc.setText("Descrição:");
+
+        jTextAreaDesc.setColumns(20);
+        jTextAreaDesc.setRows(5);
+        jScrollPane1.setViewportView(jTextAreaDesc);
+
+        jLabelQtde.setText("Quantidade:");
+
+        javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
+        jPanel.setLayout(jPanelLayout);
+        jPanelLayout.setHorizontalGroup(
+            jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelLayout.createSequentialGroup()
+                        .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelNome)
+                            .addComponent(jLabelAutor))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldAutor)
+                            .addComponent(jTextFieldNome)))
+                    .addGroup(jPanelLayout.createSequentialGroup()
+                        .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelGenero)
+                            .addComponent(jLabelISBN))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldISBN)
+                            .addComponent(jTextFieldGenero)))
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanelLayout.createSequentialGroup()
+                        .addComponent(jLabelPags)
+                        .addGap(10, 10, 10)
+                        .addComponent(jTextFieldPags, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabelQtde)
+                        .addGap(3, 3, 3)
+                        .addComponent(jTextFieldQtde, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
+                    .addGroup(jPanelLayout.createSequentialGroup()
+                        .addComponent(jLabelDesc)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanelLayout.setVerticalGroup(
+            jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNome)
+                    .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelAutor)
+                    .addComponent(jTextFieldAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelGenero)
+                    .addComponent(jTextFieldGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelISBN)
+                    .addComponent(jTextFieldISBN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelPags)
+                    .addComponent(jTextFieldPags, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelQtde)
+                    .addComponent(jTextFieldQtde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
+                .addComponent(jLabelDesc)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jButtonAdd.setText("Adicionar");
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddActionPerformed(evt);
+            }
+        });
+
+        jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
+
+        jButtonExcluir.setText("Excluir");
+        jButtonExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirActionPerformed(evt);
+            }
+        });
+
+        jButtonPrev.setText("<");
+        jButtonPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPrevActionPerformed(evt);
+            }
+        });
+
+        jButtonNext.setText(">");
+        jButtonNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNextActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,71 +205,201 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButtonConnectar)
-                .addContainerGap(572, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonNext, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                    .addComponent(jButtonSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButtonConnectar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 351, Short.MAX_VALUE)
-                .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonSair, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonNext)
+                    .addComponent(jButtonPrev))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonConnectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectarActionPerformed
-        try {
-            s = new Socket("127.0.0.1",4444);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao conectar", null, WIDTH);
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        // TODO add your handling code here:
+        Item i;
+        if(edit){
+            i = list.get(idx);
+            i.setNome(jTextFieldNome.getText());
+            i.setAutor(jTextFieldAutor.getText());
+            i.setGenero(jTextFieldGenero.getText());
+            i.setIsbn(Integer.parseInt(jTextFieldISBN.getText()));
+            i.setPaginas(Integer.parseInt(jTextFieldPags.getText()));
+            i.setQtde(Integer.parseInt(jTextFieldQtde.getText()));
+            i.setDescricao(jTextAreaDesc.getText());
+            cliente.edita(i);
+            jButtonEditar.setText("Editar");
+            jButtonAdd.setEnabled(true);
+            jButtonExcluir.setText("Excluir");
+            edit = !edit;
+            setEditMode(edit);
+            list = cliente.receiveItens();
+            idx = 0;
+            draw();
+        }else{
+            edit = !edit;
+            setEditMode(edit);
+            jButtonEditar.setText("Ok");
+            jButtonAdd.setEnabled(false);
+            jButtonExcluir.setText("Cancelar");
         }
-    }//GEN-LAST:event_jButtonConnectarActionPerformed
+        
+    }//GEN-LAST:event_jButtonEditarActionPerformed
 
+    private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
+        // TODO add your handling code here:
+        if(edit){
+            edit = !edit;
+            setEditMode(edit);
+            jButtonAdd.setText("Adicionar");
+            jButtonEditar.setText("Editar");
+            jButtonExcluir.setText("Exluir");
+            jButtonAdd.setEnabled(true);
+            jButtonEditar.setEnabled(true);
+        }else{
+            cliente.exclui(list.get(idx).getId());
+            list = cliente.receiveItens();
+        }
+        idx = 0;
+        draw();
+    }//GEN-LAST:event_jButtonExcluirActionPerformed
+
+    private void jButtonPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPrevActionPerformed
+        // TODO add your handling code here:
+        idx = (idx == 0) ? list.size()-1 : idx-1;
+        draw();
+    }//GEN-LAST:event_jButtonPrevActionPerformed
+
+    private void jButtonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNextActionPerformed
+        // TODO add your handling code here:
+        idx = (idx == list.size()-1) ? 0 : idx+1;
+        draw();
+    }//GEN-LAST:event_jButtonNextActionPerformed
+
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+        // TODO add your handling code here:
+        Item i;
+        if(edit){
+            i = new Item(Integer.parseInt(jTextFieldISBN.getText()),
+                         jTextFieldNome.getText(),
+                         jTextFieldAutor.getText(),
+                         jTextFieldGenero.getText(),
+                         jTextAreaDesc.getText(),
+                         Integer.parseInt(jTextFieldPags.getText()),
+                         Integer.parseInt(jTextFieldQtde.getText()));
+            cliente.cadastra(i);
+            jButtonAdd.setText("Adicionar");
+            jButtonEditar.setEnabled(true);
+            jButtonExcluir.setText("Excluir");
+            edit = !edit;
+            setEditMode(edit);
+            list = cliente.receiveItens();
+            idx = 0;
+            draw();
+        }else{
+            edit = !edit;
+            setEditMode(edit);
+            jTextAreaDesc.setText("");
+            jTextFieldAutor.setText("");
+            jTextFieldGenero.setText("");
+            jTextFieldISBN.setText("");
+            jTextFieldNome.setText("");
+            jTextFieldPags.setText("");
+            jTextFieldQtde.setText("");
+            jButtonAdd.setText("Ok");
+            jButtonEditar.setEnabled(false);
+            jButtonExcluir.setText("Cancelar");
+        }
+        
+    }//GEN-LAST:event_jButtonAddActionPerformed
+
+    private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jButtonSairActionPerformed
+    
+    private void draw(){
+        if((list != null) && !list.isEmpty()){
+            Item i = list.get(idx);
+            jTextFieldNome.setText(i.getNome());
+            jTextFieldAutor.setText(i.getAutor());
+            jTextFieldGenero.setText(i.getGenero());
+            jTextFieldISBN.setText(""+i.getIsbn());
+            jTextFieldPags.setText(""+i.getPaginas());
+            jTextFieldQtde.setText(""+i.getQtde());
+            jTextAreaDesc.setText(i.getDescricao());
+        }
+        setEditMode(false);
+    }
+    
+    private void setEditMode(boolean enable){
+        edit = enable;
+        jTextFieldNome.setEditable(enable);
+        jTextFieldAutor.setEditable(enable);
+        jTextFieldGenero.setEditable(enable);
+        jTextFieldISBN.setEditable(enable);
+        jTextFieldPags.setEditable(enable);
+        jTextFieldQtde.setEditable(enable);
+        jTextAreaDesc.setEditable(enable);
+    }
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Principal().setVisible(true);
-            }
-        });
+        Principal tela = new Principal();
+        tela.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonConnectar;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonEditar;
+    private javax.swing.JButton jButtonExcluir;
+    private javax.swing.JButton jButtonNext;
+    private javax.swing.JButton jButtonPrev;
     private javax.swing.JButton jButtonSair;
+    private javax.swing.JLabel jLabelAutor;
+    private javax.swing.JLabel jLabelDesc;
+    private javax.swing.JLabel jLabelGenero;
+    private javax.swing.JLabel jLabelISBN;
+    private javax.swing.JLabel jLabelNome;
+    private javax.swing.JLabel jLabelPags;
+    private javax.swing.JLabel jLabelQtde;
+    private javax.swing.JPanel jPanel;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextAreaDesc;
+    private javax.swing.JTextField jTextFieldAutor;
+    private javax.swing.JTextField jTextFieldGenero;
+    private javax.swing.JTextField jTextFieldISBN;
+    private javax.swing.JTextField jTextFieldNome;
+    private javax.swing.JTextField jTextFieldPags;
+    private javax.swing.JTextField jTextFieldQtde;
     // End of variables declaration//GEN-END:variables
 }
